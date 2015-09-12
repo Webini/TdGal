@@ -82,46 +82,13 @@
   /** transition pour la backface **/
 }
 .tdvp .element .back {
-  /*.fa {
-                @keyframes arrow-anim {
-                    0% {}
-                    10% {
-                        transform: rotateY(0deg) translateY(-10px) rotateZ(0deg); 
-                    }
-                    25% {
-                        transform: rotateY(0deg) translateY(-10px) rotateZ(25deg);
-                    }
-                    30% {
-                        transform: rotateY(0deg) translateY(-10px) rotateZ(-25deg);
-                    }
-                    35% {
-                        transform: rotateY(0deg) translateY(-10px) rotateZ(25deg);
-                    }
-                    40% {
-                        transform: rotateY(0deg) translateY(-10px) rotateZ(-25deg);
-                    }
-                    50% {
-                        transform: rotateY(0deg) translateY(-10px) rotateZ(0deg);
-                    }
-                    100% {
-                    }
-                }
-                
-                font-size: 110px;
-                text-align: center;
-                /**
-                * 75% => (je prends la largeur 100% * leRatio de l'image (1.333) / 2 - fontSize / 2 - translationY(quand on a le hover le leve le div de 10px 
-                ** /
-                margin-top: calc(~"75% - 70px");
-            }*/
   color: #000;
   text-shadow: 0px 1px 1px rgba(116, 211, 230, 0.5), 0px -1px 0px #08404e;
   background-color: rgba(0, 192, 239, 0.5);
   position: relative;
   top: -100%;
 }
-.tdvp .element .back,
-.tdvp .element .back .fa {
+.tdvp .element .back {
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
   -o-transform: rotateY(180deg);
@@ -177,8 +144,7 @@
   /* W3C */
 }
 .tdvp .element .front,
-.tdvp .element .back,
-.tdvp .element .back .fa {
+.tdvp .element .back {
   -webkit-transition: -webkit-transform 0.3s ease-in;
   -moz-transition: -moz-transform 0.3s ease-in;
   -o-transition: -o-transform 0.3s ease-in;
@@ -214,8 +180,7 @@
   /** le back se retourne **/
   /** on inverse le front  **/
 }
-.tdvp .element.focus.link:hover .back,
-.tdvp .element.focus.link:hover .back .fa {
+.tdvp .element.focus.link:hover .back {
   -webkit-transform: rotateY(0deg) translateY(-10px);
   -moz-transform: rotateY(0deg) translateY(-10px);
   -o-transform: rotateY(0deg) translateY(-10px);
