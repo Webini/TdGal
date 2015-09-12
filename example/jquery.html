@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery sample</title>
+	<link rel="stylesheet" href="../dist/css/tdgal.css" />
+    
+    <style type="text/css">
+        .fixed-width{
+            width: 900px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery">
+        <ul>
+            <li>
+                <a href="#" title="X-Men trolo"><img src="http://images.allocine.fr/pictures/14/03/24/14/35/575642.jpg" /></a>
+            </li>
+            <li>
+                <a href="/dex" title="Dexter S01e02"><img src="http://images.allocine.fr/pictures/210/032/21003280_20130504002100017.jpg" /></a>
+            </li>
+            <li>
+                <a href="/robot" title="Mr. ROBOT S01"><img src="http://images.allocine.fr/pictures/15/05/06/16/13/020977.jpg" /></a>
+            </li>
+            <li>
+                <a href="/orange" title="Orange is the new black"><img src="http://images.allocine.fr/pictures/15/06/10/10/15/094325.jpg" /></a>
+            </li>
+            <li>
+                <a href="#"><img src="http://images.allocine.fr/medias/nmedia/18/90/71/79/20214705.jpg" /></a>
+            </li>
+            <li>
+                <a href="/jourviendu" title="Notre jour viendra"><img src="http://images.allocine.fr/medias/nmedia/18/78/20/39/19474488.jpg" /></a>
+            </li>
+            <li>
+                <a href="/magnolia"><img src="http://images.allocine.fr/medias/04/66/25/046625_af.jpg" /></a>
+            </li>
+        </ul>
+    </div>
+	
+	<button type="button" onclick="changeData()">Change data</button>
+	<button type="button" onclick="changeWidth()">Toggle width</button>
+	
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../dist/js/tdgal.js"></script>
+    
+	<script type="text/javascript">
+        $('.gallery').tdGal({
+            heightRatio: 1.333 //you must specify this parameter ( = width / height )
+        });
+    
+        function changeData(){
+            var all = [
+                { label: "X-Men trolo", image: "http://images.allocine.fr/pictures/14/03/24/14/35/575642.jpg" },
+                { image: "http://images.allocine.fr/medias/nmedia/18/90/71/79/20214705.jpg" },
+                { link: "/dex", label: "Dexter S01e02", image: "http://images.allocine.fr/pictures/210/032/21003280_20130504002100017.jpg" },
+                { link: "/robot", label: "Mr. ROBOT S01", image: "http://images.allocine.fr/pictures/15/05/06/16/13/020977.jpg" },
+                { link: "/orange", label: "Orange is the new black", image: "http://images.allocine.fr/pictures/15/06/10/10/15/094325.jpg" },
+                { link: "/jourviendu", label: "Notre jour viendra", image: "http://images.allocine.fr/medias/nmedia/18/78/20/39/19474488.jpg" },
+                { link: "/magnolia", image: "http://images.allocine.fr/medias/04/66/25/046625_af.jpg" } 
+            ];
+            
+            var all = all.splice(0, Math.floor(Math.random() * (all.length - 2)) + 2);
+            all.sort(function(){
+                return 0.5 - Math.random();
+            })
+            
+            $('.gallery').tdGal('elements', all);
+        }
+        
+        function changeWidth(){
+            $('.gallery').toggleClass('fixed-width')
+                         .tdGal('update');
+        }
+	</script>
+</body>
+</html>

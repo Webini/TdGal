@@ -1,0 +1,27 @@
+{
+  "name": "TdGal",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Webini/TdGal",
+  "authors": [
+    "Nicolas GASPARINI <nicolas.gasp@webini.fr>"
+  ],
+  "description": "3D css3 gallery for jQuery and Angular.js",
+  "keywords": [
+    "css3",
+    "3d",
+    "gallery",
+    "css"
+  ],
+  "license": "GPL",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "angularjs": "~1.4.5"
+  }
+}
