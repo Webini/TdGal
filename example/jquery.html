@@ -15,7 +15,18 @@
             text-align: center;
             margin: 10px 0px;
         }
-
+        
+        .back-content {  
+            font-family: Arial;
+            padding: 20px;
+            text-align: left;
+            font-size: 1.5em;
+        }
+        
+        .back-content .title {
+            font-size: 2.5em;
+            padding: 15px 0px;
+        }
     </style>
 </head>
 <body>
@@ -30,13 +41,13 @@
     
     <div class="gallery">
         <ul>
-            <li>
+            <li data-properties="{&quot;description&quot;: &quot;TestLeRoger <br />sdfjksd sdfoisdf sdofijsdf sdfoijsdf odsf&quot;}">
                 <a href="#" title="X-Men trolo"><img src="http://images.allocine.fr/pictures/14/03/24/14/35/575642.jpg" /></a>
             </li>
-            <li>
+            <li data-properties="{&quot;description&quot;: &quot;Dexter <br />sdfjksd sdfoisdf sdofijsdf sdfoijsdf odsf&quot;}">
                 <a href="/dex" title="Dexter S01e02"><img src="http://images.allocine.fr/pictures/210/032/21003280_20130504002100017.jpg" /></a>
             </li>
-            <li>
+            <li data-properties="{&quot;description&quot;: &quot;MrRobot <br />sdfjksd sdfoisdf sdofijsdf sdfoijsdf odsf&quot;}">
                 <a href="/robot" title="Mr. ROBOT S01"><img src="http://images.allocine.fr/pictures/15/05/06/16/13/020977.jpg" /></a>
             </li>
             <li>
@@ -70,6 +81,18 @@
                 },
                 onFocus: function(data){
                     alert("Focus => \nLabel: " + data.label + "\nLink: " + data.link + "\nImage: " + data.image);
+                },
+                backTemplate: function(data){
+                    var $back = $('<div class="back-content"><div class="title"></div><div class="description"></div></div>'); 
+                    
+                    if(data.label){
+                        $back.find('.title').html(data.label);
+                    }
+                    if(data.description){
+                        $back.find('.description').html(data.description);
+                    }
+                    
+                    return $back;
                 },
                 classes: 'Class1 Class2'
             });

@@ -82,40 +82,43 @@
   /** transition pour la backface **/
 }
 .tdvp .element .back {
-  text-align: center;
+  /*.fa {
+                @keyframes arrow-anim {
+                    0% {}
+                    10% {
+                        transform: rotateY(0deg) translateY(-10px) rotateZ(0deg); 
+                    }
+                    25% {
+                        transform: rotateY(0deg) translateY(-10px) rotateZ(25deg);
+                    }
+                    30% {
+                        transform: rotateY(0deg) translateY(-10px) rotateZ(-25deg);
+                    }
+                    35% {
+                        transform: rotateY(0deg) translateY(-10px) rotateZ(25deg);
+                    }
+                    40% {
+                        transform: rotateY(0deg) translateY(-10px) rotateZ(-25deg);
+                    }
+                    50% {
+                        transform: rotateY(0deg) translateY(-10px) rotateZ(0deg);
+                    }
+                    100% {
+                    }
+                }
+                
+                font-size: 110px;
+                text-align: center;
+                /**
+                * 75% => (je prends la largeur 100% * leRatio de l'image (1.333) / 2 - fontSize / 2 - translationY(quand on a le hover le leve le div de 10px 
+                ** /
+                margin-top: calc(~"75% - 70px");
+            }*/
+  color: #000;
+  text-shadow: 0px 1px 1px rgba(116, 211, 230, 0.5), 0px -1px 0px #08404e;
   background-color: rgba(0, 192, 239, 0.5);
   position: relative;
   top: -100%;
-}
-.tdvp .element .back .fa {
-  font-size: 110px;
-  text-align: center;
-  /**
-                * 75% => (je prends la largeur 100% * leRatio de l'image (1.333) / 2 - fontSize / 2 - translationY(quand on a le hover le leve le div de 10px 
-                **/
-  margin-top: calc(75% - 70px);
-  color: #000;
-  text-shadow: 0px 1px 1px #74d3e6, 0px -1px 2px #08404e;
-}
-@keyframes arrow-anim {
-  10% {
-    transform: rotateY(0deg) translateY(-10px) rotateZ(0deg);
-  }
-  25% {
-    transform: rotateY(0deg) translateY(-10px) rotateZ(25deg);
-  }
-  30% {
-    transform: rotateY(0deg) translateY(-10px) rotateZ(-25deg);
-  }
-  35% {
-    transform: rotateY(0deg) translateY(-10px) rotateZ(25deg);
-  }
-  40% {
-    transform: rotateY(0deg) translateY(-10px) rotateZ(-25deg);
-  }
-  50% {
-    transform: rotateY(0deg) translateY(-10px) rotateZ(0deg);
-  }
 }
 .tdvp .element .back,
 .tdvp .element .back .fa {

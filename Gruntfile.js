@@ -2,7 +2,12 @@ module.exports = function(grunt) {
     var debug = !grunt.option('prod');
     
 	var jsFiles = {};
-	jsFiles['./dist/js/tdgal.' + (!debug ? 'min.' : '') + 'js'] = './src/gallery.js';
+	jsFiles['./dist/js/tdgal.jquery.' + (!debug ? 'min.' : '') + 'js'] = './src/gallery.js';
+	jsFiles['./dist/js/tdgal.angular.' + (!debug ? 'min.' : '') + 'js'] = './src/directive.js';
+	jsFiles['./dist/js/tdgal.angular.standalone.' + (!debug ? 'min' : '') + 'js'] = [
+		'./src/gallery.js',
+		'./src/directive.js',
+	];
 	
 	var cssFiles = {};
 	cssFiles['./dist/css/tdgal.' + (!debug ? 'min.' : '') + 'css'] = './src/style.less';
@@ -33,7 +38,7 @@ module.exports = function(grunt) {
 		watch: {
 			styles: {
 				files: [
-					'./src/css/*.less'
+					'./src/*.less'
 				], // which files to watch
 				tasks: ['less'],
 				options: {
@@ -42,7 +47,7 @@ module.exports = function(grunt) {
 			},
 			js: {
 				files: [
-                    './src/*.js',
+                    './src/*.js'
 				],
 				tasks: ['uglify']
 			}

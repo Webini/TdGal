@@ -69,7 +69,6 @@
                 label: $a.attr("title") || $el.data("label")
             };
             $.extend(elData, $el.data("properties"));
-            console.debug("++++> ", elData);
             data.push(elData);
         });
         var $template = $(this.TEMPLATE);

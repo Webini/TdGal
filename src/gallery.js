@@ -5,7 +5,10 @@
             'classes': null,
             'onClick': null,
             'onFocus': null,
-            'heightRatio': 1    
+            'backTemplate': function(){
+                return '';
+            },
+            'heightRatio': 1  
         };
         
         $.extend(this._config, config);
@@ -26,6 +29,8 @@
         */
         this.FOCUS_TRANSLATION = 1;
         
+        this.FONT_RATIO = 22;
+        
         this.TEMPLATE = 
             '<div class="tdvp">' +
                 '<div class="template-element">' +
@@ -36,7 +41,7 @@
                             '<div class="shadow"></div>' +
                         '</div>' +
                     '</div>' +
-                    '<div class="back applyHeight"><span class="fa fa-cloud-download"></span></div>' +
+                    '<div class="back applyFont applyHeight"></div>' +
                 '</div>' +
             '</div>' +
             '<div class="tdlabel">' + 
@@ -89,12 +94,15 @@
                 
                 if(link.toLowerCase() === 'javascript:' || link === '#')
                     link = null;
-                    
-                data.push({
+                
+                var elData = {
                     link: link,
                     image: $el.find('img').attr('src'),
-                    label: $a.attr('title') || $el.data('label') 
-                });
+                    label: $a.attr('title') || $el.data('label'),
+                };
+                
+                $.extend(elData, $el.data('properties'));
+                data.push(elData);
             });
             
             var $template = $(this.TEMPLATE);
@@ -133,16 +141,18 @@
         });
         
         if(data.link){
-            $el.data('link', data.link);
             $el.addClass('link');
         }
         else{
-            $el.data('link', null);
             $el.removeClass('link');
         }
         
-        $el.data('label', (!data.label ? '' : data.label))
-           .data('data', data)
+        //recreate backface template
+        $el.find('.back').html(
+            this._config.backTemplate(data)
+        );
+        
+        $el.data('data', data)
            .removeClass('template-element')
            .addClass('element');
     }
@@ -186,8 +196,10 @@
         //recalculate height
         var elHeight = this._elemWidth * this._heightRatio;
         this._elements.height(elHeight)
-                        .find('.applyHeight')
-                        .height(elHeight); 
+                      .find('.applyHeight')
+                      .height(elHeight); 
+        this._elements.find('.applyFont')
+                      .css({ 'font-size': Math.round(this._elemWidth / this.FONT_RATIO) + 'px'})
         
         this._cont.height(elHeight + this._clabel.outerHeight(true));
         
@@ -275,7 +287,7 @@
                 label = $labels.eq(i);
             }
             
-            var labelText = this._elements.eq(i).data('label');
+            var labelText = this._elements.eq(i).data('data')['label'];
             
             if(!labelText || labelText.length <= 0){
                 label.html('&nbsp;');
@@ -300,9 +312,10 @@
     * Lorsqu'on clique sur l'element
     */
     TdGal.prototype._onElementClick = function(el){
+        var data = el.data('data');
         if(el.hasClass('focus')){
-            if(this._config.onClick && el.data('link')){
-                this._config.onClick(el.data('data'));
+            if(this._config.onClick && data.link){
+                this._config.onClick(data);
             }    
             return;
         }
@@ -313,7 +326,7 @@
         this._displayTag(this._elements.index(el));
         
         if(this._config.onFocus){
-            this._config.onFocus(el.data('data'));
+            this._config.onFocus(data);
         }
     };
     
