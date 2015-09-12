@@ -10,9 +10,24 @@
             width: 900px;
             margin: 0 auto;
         }
+        
+        .ctrl {
+            text-align: center;
+            margin: 10px 0px;
+        }
+
     </style>
 </head>
 <body>
+	<div class="ctrl">
+        <button type="button" onclick="create()">Create</button>
+        <button type="button" onclick="destroy()">Destroy</button>
+        <button type="button" onclick="changeData()">Change data</button>
+        <button type="button" onclick="changeWidth()">Toggle width</button>
+        <button type="button" onclick="$('.gallery').tdGal('prev')">Previous</button>
+        <button type="button" onclick="$('.gallery').tdGal('next')">Next</button>
+	</div>
+    
     <div class="gallery">
         <ul>
             <li>
@@ -38,17 +53,27 @@
             </li>
         </ul>
     </div>
-	
-	<button type="button" onclick="changeData()">Change data</button>
-	<button type="button" onclick="changeWidth()">Toggle width</button>
-	
-	<script src="../bower_components/jquery/dist/jquery.js"></script>
+    
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="../dist/js/tdgal.js"></script>
     
 	<script type="text/javascript">
-        $('.gallery').tdGal({
-            heightRatio: 1.333 //you must specify this parameter ( = width / height )
-        });
+        function destroy(){
+            $('.gallery').tdGal('destroy');
+        }
+        
+        function create(){
+            $('.gallery').tdGal({
+                heightRatio: 1.333, //you must specify this parameter ( = width / height )
+                onClick: function(data){
+                    alert("Click => \nLabel: " + data.label + "\nLink: " + data.link + "\nImage: " + data.image);
+                },
+                onFocus: function(data){
+                    alert("Focus => \nLabel: " + data.label + "\nLink: " + data.link + "\nImage: " + data.image);
+                },
+                classes: 'Class1 Class2'
+            });
+        }
     
         function changeData(){
             var all = [

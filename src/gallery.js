@@ -3,6 +3,8 @@
         this._config = {
             'container': null,
             'classes': null,
+            'onClick': null,
+            'onFocus': null,
             'heightRatio': 1    
         };
         
@@ -24,22 +26,22 @@
         */
         this.FOCUS_TRANSLATION = 1;
         
-        this.TEMPLATE = ' \
-            <div class="tdvp"> \
-                <div class="template-element"> \
-                    <div class="front applyHeight"> \
-                        <div class="image"></div> \
-                        <div class="applyHeight"> \
-                            <div class="mirror"></div> \
-                            <div class="shadow"></div> \
-                        </div> \
-                    </div> \
-                    <div class="back applyHeight"><span class="fa fa-cloud-download"></span></div> \
-                </div> \
-            </div> \
-            <div class="tdlabel"> \
-                <div class="label-overflow"></div> \
-            </div>';
+        this.TEMPLATE = 
+            '<div class="tdvp">' +
+                '<div class="template-element">' +
+                    '<div class="front applyHeight">' + 
+                        '<div class="image"></div>' +
+                        '<div class="applyHeight">' +
+                            '<div class="mirror"></div>' +
+                            '<div class="shadow"></div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="back applyHeight"><span class="fa fa-cloud-download"></span></div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="tdlabel">' + 
+                '<div class="label-overflow"></div>' + 
+            '</div>';
             
         this._original = this._config.container;
         this._templateElement = null;
@@ -101,8 +103,11 @@
             this._cont = $('<div />').attr('class', this._config.classes)
                                      .addClass('tdgal')
                                      .html($template);
-                                    
+            
+            //backup original contents
+            var contents = this._original.contents();                                   
             this._original.html(this._cont);
+            this._original = contents;
                     
             this._vp = this._cont.find('.tdvp:first-child');
             
@@ -137,6 +142,7 @@
         }
         
         $el.data('label', (!data.label ? '' : data.label))
+           .data('data', data)
            .removeClass('template-element')
            .addClass('element');
     }
@@ -294,11 +300,52 @@
     * Lorsqu'on clique sur l'element
     */
     TdGal.prototype._onElementClick = function(el){
+        if(el.hasClass('focus')){
+            if(this._config.onClick && el.data('link')){
+                this._config.onClick(el.data('data'));
+            }    
+            return;
+        }
+        
         this._elements.removeClass('focus');
         el.addClass('focus');
         this._calculate();
         this._displayTag(this._elements.index(el));
+        
+        if(this._config.onFocus){
+            this._config.onFocus(el.data('data'));
+        }
     };
+    
+    /**
+     * Display next element
+     */
+    TdGal.prototype.next = function(){
+        var $focus = this._vp.find('.focus');
+        var $next = $focus.next('.element');
+        
+        if($next.size() > 0){
+            this._onElementClick($next);
+        }
+        else{
+            this._onElementClick(this._elements.first());
+        }
+    }
+    
+    /**
+     * Display previous element
+     */
+    TdGal.prototype.prev = function(){
+        var $focus = this._vp.find('.focus');
+        var $prev = $focus.prev('.element');
+        
+        if($prev.size() > 0){
+            this._onElementClick($prev);
+        }
+        else{
+            this._onElementClick(this._elements.last());
+        }
+    }
     
     /**
     * Destroy the gallery
@@ -313,6 +360,8 @@
         this._clabel = null;
         this._labelOverflow = null;
         this._elements = null;
+        this._templateElement = null;
+        this._config = null;
         
         $(window).off('resize.tdGal');
     }
@@ -347,7 +396,15 @@
                         $this.data('__tdgal', null);
                         inst.destroy();
                         return;
+                    
+                    case 'prev':
+                        inst.prev();
+                        return;
                         
+                    case 'next':
+                        inst.next();
+                        return;
+                    
                     case 'update': 
                         inst.update();
                         return;

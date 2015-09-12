@@ -22,12 +22,12 @@ module.exports = function(grunt) {
 		},
 		less: {
 			development: {
+				files: cssFiles,
 				options: {
 					compress: !debug,
 					yuicompress: false,
 					optimization: (debug ? 2 : 10)
-				},
-				files: cssFiles
+				}
 			}
 		},
 		watch: {
