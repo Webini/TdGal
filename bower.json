@@ -5,12 +5,16 @@
   "authors": [
     "Nicolas GASPARINI <nicolas.gasp@webini.fr>"
   ],
-  "description": "3D css3 gallery for jQuery and Angular.js",
+  "description": "3D css gallery for jQuery and Angular.js",
   "keywords": [
     "css3",
     "3d",
     "gallery",
-    "css"
+    "css",
+    "angular",
+    "angularjs",
+    "angular.js",
+    "jquery"
   ],
   "license": "GPL",
   "ignore": [
