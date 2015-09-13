@@ -37,6 +37,10 @@
         <button type="button" onclick="changeWidth()">Toggle width</button>
         <button type="button" onclick="$('.gallery').tdGal('prev')">Previous</button>
         <button type="button" onclick="$('.gallery').tdGal('next')">Next</button>
+        <button type="button" onclick="count()">Count elements</button>
+        &nbsp;
+        <input type="number" id="nb" value="0" onchange="gotoOffset()" />
+        <button type="button" onclick="gotoOffset()">go</button>
 	</div>
     
     <div class="gallery">
@@ -115,6 +119,15 @@
             })
             
             $('.gallery').tdGal('elements', all);
+        }
+        
+        function gotoOffset(){
+            var val = parseInt($('#nb').val());
+            $('.gallery').tdGal('focus', val);
+        }
+        
+        function count(){
+            alert($('.gallery').tdGal('count'));
         }
         
         function changeWidth(){

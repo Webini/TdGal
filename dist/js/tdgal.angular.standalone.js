@@ -5,6 +5,7 @@
             classes: null,
             onClick: null,
             onFocus: null,
+            onInit: null,
             backTemplate: function() {
                 return "";
             },
@@ -54,6 +55,11 @@
         this._setDefaultFocus();
         this._compileLabels();
         this.update();
+        if (this._config.onInit) {
+            window.setTimeout(function() {
+                self._config.onInit();
+            });
+        }
     };
     TdGal.prototype._build = function() {
         //récup les data déjà déf
@@ -235,16 +241,17 @@
         var data = el.data("data");
         if (el.hasClass("focus")) {
             if (this._config.onClick && data.link) {
-                this._config.onClick(data);
+                this._config.onClick(data, this._elements.index(el));
             }
             return;
         }
         this._elements.removeClass("focus");
         el.addClass("focus");
         this._calculate();
-        this._displayTag(this._elements.index(el));
+        var offset = this._elements.index(el);
+        this._displayTag(offset);
         if (this._config.onFocus) {
-            this._config.onFocus(data);
+            this._config.onFocus(data, offset);
         }
     };
     /**
@@ -272,6 +279,24 @@
         }
     };
     /**
+     * Set focus
+     * @param int offset Element offset
+     */
+    TdGal.prototype.focus = function(offset) {
+        if (offset >= this._nElem) {
+            offset = 0;
+        } else if (offset < 0) {
+            offset = this._nElem - 1;
+        }
+        this._onElementClick(this._elements.eq(offset));
+    };
+    /**
+      * Get elements count
+      */
+    TdGal.prototype.count = function() {
+        return this._nElem;
+    };
+    /**
     * Destroy the gallery
     */
     TdGal.prototype.destroy = function() {
@@ -295,11 +320,20 @@
      * jQuery wrapper
      */
     $.fn.tdGal = function(config, params) {
+        //getter
+        if (typeof config == "string" && config == "count") {
+            var inst = $(this).first().data("__tdgal");
+            if (!inst) throw new Error("Tdgal instance not found");
+            return inst.count();
+        }
         return this.each(function() {
             var $this = $(this);
             var inst = $(this).data("__tdgal");
             //create the gallery
-            if ((typeof config == "object" || typeof config === "undefined") && !inst) {
+            if (typeof config == "object" || typeof config === "undefined") {
+                if (inst) {
+                    throw new Error("TdGal already created");
+                }
                 if (!config) {
                     config = {};
                 }
@@ -324,6 +358,10 @@
 
                   case "update":
                     inst.update();
+                    return;
+
+                  case "focus":
+                    inst.focus(params);
                     return;
 
                   case "elements":
@@ -364,17 +402,17 @@
             }
         };
     } ]);
-    m.directive("tdGal", [ "$controller", "$compile", function($controller, $compile) {
+    m.directive("tdGal", [ "$controller", "$compile", "$rootScope", function($controller, $compile, $rootScope) {
         return {
             restrict: "E",
             replace: false,
             scope: {
-                data: "="
+                data: "=",
+                index: "="
             },
-            controller: "@",
-            name: "controller",
             link: function($scope, $elem, $attrs, $ctrl) {
                 var templateUrl = $attrs.templateUrl;
+                $scope.localIndex = $scope.index;
                 var localConf = {
                     heightRatio: $scope.$eval($attrs.heightRatio),
                     classes: $attrs.class,
@@ -390,28 +428,32 @@
                     onClick: function(data) {
                         $scope.$emit("tdgal-click", data);
                     },
-                    onFocus: function(data) {
+                    onFocus: function(data, index) {
+                        $scope.index = $scope.localIndex = index;
+                        if (!$scope.$$phase && !$rootScope.$$phase) $scope.$apply();
                         $scope.$emit("tdgal-focus", data);
+                    },
+                    onInit: function() {
+                        if ($scope.index) {
+                            $elem.tdGal("focus", $scope.index);
+                        }
                     }
                 };
                 if (!localConf.heightRatio || localConf.heightRatio <= 0) delete localConf.heightRatio;
                 if (!localConf.classes || localConf.classes <= 0) delete localConf.classes;
                 $elem.tdGal(localConf);
-                $scope.next = function() {
-                    $elem.tdGal("next");
-                };
-                $scope.prev = function() {
-                    $elem.tdGal("prev");
-                };
-                $scope.update = function() {
-                    $elem.tdGal("update");
-                };
+                var offIndexWatch = $scope.$watch("index", function(val) {
+                    if ($scope.localIndex != val) {
+                        $elem.tdGal("focus", val);
+                    }
+                });
                 var dataWatcher = $scope.$watch("data", function(data) {
                     $elem.tdGal("elements", data);
                 });
                 $scope.$on("$destroy", function() {
                     $elem.tdGal("destroy");
                     dataWatcher();
+                    offIndexWatch();
                 });
             }
         };

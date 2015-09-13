@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 	var jsFiles = {};
 	jsFiles['./dist/js/tdgal.jquery.' + (!debug ? 'min.' : '') + 'js'] = './src/gallery.js';
 	jsFiles['./dist/js/tdgal.angular.' + (!debug ? 'min.' : '') + 'js'] = './src/directive.js';
-	jsFiles['./dist/js/tdgal.angular.standalone.' + (!debug ? 'min' : '') + 'js'] = [
+	jsFiles['./dist/js/tdgal.angular.standalone.' + (!debug ? 'min.' : '') + 'js'] = [
 		'./src/gallery.js',
 		'./src/directive.js',
 	];

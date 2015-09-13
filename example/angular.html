@@ -31,15 +31,19 @@
 </head>
 <body ng-controller="DemoController">
 	<div class="ctrl">
-		<button type="button" ng-click="test()">Yolo</button>
-        <button type="button" ng-click="change()">Change data</button>
+        goto&nbsp;
+        <input type="number" ng-model="filesIndex" />
+        <button type="button" ng-click="change()">Add data</button>
+        <button type="button" ng-click="next()">Next</button>
+        <button type="button" ng-click="prev()">Prev</button>
 	</div>
     
     <td-gal data="files"
+            index="filesIndex"
             height-ratio="1.50"
             template-url="/templates/backface.html"
-            controller="CustomGalleryController"
-            class="gallery"></td-gal>
+            class="gallery">
+    </td-gal>
     
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
@@ -47,16 +51,6 @@
     
 	<script>
 		var app = angular.module('demo', [ 'tdGal' ]);
-        
-        app.controller('CustomGalleryController', [ '$scope',  function($scope){
-            $scope.$on('tdgal-focus', function($evt, data){
-                console.debug('focus', data);
-            });
-            
-            $scope.$on('tdgal-click', function($evt, data){
-                window.open(data.link, '_blank');
-            });
-        }]);
         
 		app.controller('DemoController', ['$scope', '$http', function($scope, $http){
             function processImdb(data){
@@ -75,11 +69,27 @@
             
             $scope.files = processImdb(imdbData[0].movies);
             $scope.data = processImdb(imdbData[1].movies);
+            $scope.filesIndex = 5;
+            
+            $scope.next = function(){
+                $scope.filesIndex++;
+            }
+            
+            $scope.prev = function(){
+                $scope.filesIndex--;
+            }
             
             $scope.change = function(){
                 $scope.files = $scope.data.concat($scope.files);  
             };
             
+            $scope.$on('tdgal-focus', function($evt, data){
+                console.debug('focus gallery', data);
+            });
+            
+            $scope.$on('tdgal-click', function($evt, data){
+                window.open(data.link, '_blank');
+            });
 		}]);
         
 	</script>

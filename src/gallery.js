@@ -5,6 +5,7 @@
             'classes': null,
             'onClick': null,
             'onFocus': null,
+            'onInit': null,
             'backTemplate': function(){
                 return '';
             },
@@ -78,10 +79,15 @@
         });
         
         
-        
         this._setDefaultFocus();
         this._compileLabels();
         this.update();
+        
+        if(this._config.onInit){
+            window.setTimeout(function(){
+                self._config.onInit();
+            });
+        }
     };
     
     TdGal.prototype._build = function(){
@@ -315,7 +321,7 @@
         var data = el.data('data');
         if(el.hasClass('focus')){
             if(this._config.onClick && data.link){
-                this._config.onClick(data);
+                this._config.onClick(data, this._elements.index(el));
             }    
             return;
         }
@@ -323,10 +329,11 @@
         this._elements.removeClass('focus');
         el.addClass('focus');
         this._calculate();
-        this._displayTag(this._elements.index(el));
+        var offset = this._elements.index(el);
+        this._displayTag(offset);
         
         if(this._config.onFocus){
-            this._config.onFocus(data);
+            this._config.onFocus(data, offset);
         }
     };
     
@@ -361,6 +368,28 @@
     }
     
     /**
+     * Set focus
+     * @param int offset Element offset
+     */
+     TdGal.prototype.focus = function(offset){
+        if(offset >= this._nElem){
+            offset = 0;
+        }
+        else if(offset < 0){
+            offset = this._nElem - 1;
+        }
+        
+        this._onElementClick(this._elements.eq(offset));
+     };
+     
+     /**
+      * Get elements count
+      */
+      TdGal.prototype.count = function(){
+          return this._nElem;
+      }
+    
+    /**
     * Destroy the gallery
     */
     TdGal.prototype.destroy = function(){
@@ -388,12 +417,25 @@
      * jQuery wrapper
      */
     $.fn.tdGal = function(config, params){
+        //getter
+        if(typeof config == 'string' && config == 'count'){
+            var inst = $(this).first().data('__tdgal');
+            if(!inst)
+                throw new Error('Tdgal instance not found');
+            
+            return inst.count();
+        }
+        
         return this.each(function(){
             var $this = $(this);
             var inst = $(this).data('__tdgal');
             
             //create the gallery
-            if((typeof config == 'object' || typeof config === 'undefined') && !inst){
+            if((typeof config == 'object' || typeof config === 'undefined')){
+                if(inst){
+                    throw new Error('TdGal already created');
+                }
+                
                 if(!config){
                     config = {};
                 }
@@ -422,6 +464,10 @@
                         inst.update();
                         return;
                         
+                    case 'focus':
+                        inst.focus(params);
+                        return;
+                    
                     case 'elements':
                         inst.setElements(params);
                         return;

@@ -23,17 +23,17 @@
             }
         };
     } ]);
-    m.directive("tdGal", [ "$controller", "$compile", function($controller, $compile) {
+    m.directive("tdGal", [ "$controller", "$compile", "$rootScope", function($controller, $compile, $rootScope) {
         return {
             restrict: "E",
             replace: false,
             scope: {
-                data: "="
+                data: "=",
+                index: "="
             },
-            controller: "@",
-            name: "controller",
             link: function($scope, $elem, $attrs, $ctrl) {
                 var templateUrl = $attrs.templateUrl;
+                $scope.localIndex = $scope.index;
                 var localConf = {
                     heightRatio: $scope.$eval($attrs.heightRatio),
                     classes: $attrs.class,
@@ -49,28 +49,32 @@
                     onClick: function(data) {
                         $scope.$emit("tdgal-click", data);
                     },
-                    onFocus: function(data) {
+                    onFocus: function(data, index) {
+                        $scope.index = $scope.localIndex = index;
+                        if (!$scope.$$phase && !$rootScope.$$phase) $scope.$apply();
                         $scope.$emit("tdgal-focus", data);
+                    },
+                    onInit: function() {
+                        if ($scope.index) {
+                            $elem.tdGal("focus", $scope.index);
+                        }
                     }
                 };
                 if (!localConf.heightRatio || localConf.heightRatio <= 0) delete localConf.heightRatio;
                 if (!localConf.classes || localConf.classes <= 0) delete localConf.classes;
                 $elem.tdGal(localConf);
-                $scope.next = function() {
-                    $elem.tdGal("next");
-                };
-                $scope.prev = function() {
-                    $elem.tdGal("prev");
-                };
-                $scope.update = function() {
-                    $elem.tdGal("update");
-                };
+                var offIndexWatch = $scope.$watch("index", function(val) {
+                    if ($scope.localIndex != val) {
+                        $elem.tdGal("focus", val);
+                    }
+                });
                 var dataWatcher = $scope.$watch("data", function(data) {
                     $elem.tdGal("elements", data);
                 });
                 $scope.$on("$destroy", function() {
                     $elem.tdGal("destroy");
                     dataWatcher();
+                    offIndexWatch();
                 });
             }
         };
