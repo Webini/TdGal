@@ -27,6 +27,9 @@
             font-size: 2.5em;
             padding: 15px 0px;
         }
+        
+        /** with element a bit more larger **/
+        .demo .element { width: 50% !important; }
     </style>
 </head>
 <body>
@@ -69,12 +72,46 @@
         </ul>
     </div>
     
+    <div class="demo">
+        <ul>
+            <li>
+                <a href="#" title="City"><img src="http://www.travelskyline.net/thumbs/atlanta_city_center_building-t2.jpg" /></a>
+            </li>
+            <li>
+                <a href="#" title="City1"><img src="http://wallpaperest.com/wallpapers/dance-all-night-city_123895.jpg" /></a>
+            </li>
+            <li>
+                <a href="#" title="City2"><img src="http://www.wallcoo.net/human/city_night_scene/m01/Sunset_Over_Melbourne_Australia.jpg" /></a>
+            </li>
+            <li>
+                <a href="#" title="City3"><img src="http://wallpaperest.com/wallpapers/night-city-lights_000142.jpg" /></a>
+            </li>
+            <li>
+                <a href="#" title="City4"><img src="http://www.iwallhd.com/stock/shanghai-at-night-city-hd-wallpaper.jpg" /></a>
+            </li>
+            <li>
+                <a href="#" title="City5"><img src="http://www.wallpaperawesome.com/wallpapers-awesome/wallpapers-cities-metropolis-monuments-palaces-architecture-churches-awesome/wallpaper-night-bridge-in-sidney-city.jpg" /></a>
+            </li>
+            <li>
+                <a href="#" title="City6"><img src="http://gallsource.com/wp-content/uploads/2014/09/High-Quality-Full-Colorful-City-Wallpaper.jpg" /></a>
+            </li>
+            <li>
+                <a href="#" title="City7"><img src="https://www.mcquilling.com/media/locations/mexico_city.jpg" /></a>
+            </li>
+            <li>
+                <a href="#" title="City8"><img src="http://cdn.architecturendesign.net/wp-content/uploads/2014/12/26-New-York-city-Skyline-United-States.jpg" /></a>
+            </li>
+        </ul>
+    </div>
+    
+    
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="../dist/js/tdgal.jquery.js"></script>
     
 	<script type="text/javascript">
         function destroy(){
             $('.gallery').tdGal('destroy');
+            $('.demo').tdGal('destroy');
         }
         
         function create(){
@@ -100,6 +137,8 @@
                 },
                 classes: 'Class1 Class2'
             });
+            
+            $('.demo').tdGal({ heightRatio: 0.75 });
         }
     
         function changeData(){
@@ -134,6 +173,8 @@
             $('.gallery').toggleClass('fixed-width')
                          .tdGal('update');
         }
+        
+        create();
 	</script>
 </body>
 </html>

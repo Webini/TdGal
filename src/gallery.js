@@ -78,6 +78,15 @@
             }, 200);
         });
         
+        this._cont.on('keydown.tdGal', function($evt){
+            var code = $evt.keyCode || $evt.which;
+            if(code == 39){
+                self.next();
+            }
+            else if(code == 37){
+                self.prev();
+            }
+        });
         
         this._setDefaultFocus();
         this._compileLabels();
@@ -115,6 +124,7 @@
             this._templateElement = $template.find('.template-element');
             
             this._cont = $('<div />').attr('class', this._config.classes)
+                                     .attr('tabindex', 1)
                                      .addClass('tdgal')
                                      .html($template);
             
@@ -394,7 +404,8 @@
     */
     TdGal.prototype.destroy = function(){
         this._elements.off('click.tdGal');
-        this._cont.replaceWith(this._original);
+        this._cont.off('keypress.tdGal')
+                  .replaceWith(this._original);
         
         this._original = null;
         this._vp = null;

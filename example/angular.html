@@ -42,6 +42,9 @@
             index="filesIndex"
             height-ratio="1.50"
             template-url="/templates/backface.html"
+            on-init="onInit"
+            on-focus="onFocus"
+            on-click="onClick"
             class="gallery">
     </td-gal>
     
@@ -83,13 +86,17 @@
                 $scope.files = $scope.data.concat($scope.files);  
             };
             
-            $scope.$on('tdgal-focus', function($evt, data){
-                console.debug('focus gallery', data);
-            });
+            $scope.onInit = function(){
+                console.debug('on init gallery');
+            }
             
-            $scope.$on('tdgal-click', function($evt, data){
+            $scope.onFocus = function(data){
+                console.debug('focus gallery', data);
+            };
+            
+            $scope.onClick = function(data){
                 window.open(data.link, '_blank');
-            });
+            };
 		}]);
         
 	</script>

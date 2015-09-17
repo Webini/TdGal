@@ -52,6 +52,14 @@
                 self._onWinResize();
             }, 200);
         });
+        this._cont.on("keydown.tdGal", function($evt) {
+            var code = $evt.keyCode || $evt.which;
+            if (code == 39) {
+                self.next();
+            } else if (code == 37) {
+                self.prev();
+            }
+        });
         this._setDefaultFocus();
         this._compileLabels();
         this.update();
@@ -79,7 +87,7 @@
         });
         var $template = $(this.TEMPLATE);
         this._templateElement = $template.find(".template-element");
-        this._cont = $("<div />").attr("class", this._config.classes).addClass("tdgal").html($template);
+        this._cont = $("<div />").attr("class", this._config.classes).attr("tabindex", 1).addClass("tdgal").html($template);
         //backup original contents
         var contents = this._original.contents();
         this._original.html(this._cont);
@@ -301,7 +309,7 @@
     */
     TdGal.prototype.destroy = function() {
         this._elements.off("click.tdGal");
-        this._cont.replaceWith(this._original);
+        this._cont.off("keypress.tdGal").replaceWith(this._original);
         this._original = null;
         this._vp = null;
         this._cont = null;
@@ -408,9 +416,15 @@
             replace: false,
             scope: {
                 data: "=",
+                onFocus: "&?",
+                onClick: "&?",
+                onInit: "&?",
                 index: "="
             },
             link: function($scope, $elem, $attrs, $ctrl) {
+                var onFocusCallback = $scope.onFocus ? $scope.onFocus() : null;
+                var onClickCallback = $scope.onClick ? $scope.onClick() : null;
+                var onInitCallback = $scope.onInit ? $scope.onInit() : null;
                 var templateUrl = $attrs.templateUrl;
                 $scope.localIndex = $scope.index;
                 var localConf = {
@@ -426,14 +440,21 @@
                         return el;
                     },
                     onClick: function(data) {
-                        $scope.$emit("tdgal-click", data);
+                        if (onClickCallback) {
+                            onClickCallback(data);
+                        }
                     },
                     onFocus: function(data, index) {
                         $scope.index = $scope.localIndex = index;
+                        if (onFocusCallback) {
+                            onFocusCallback(data);
+                        }
                         if (!$scope.$$phase && !$rootScope.$$phase) $scope.$apply();
-                        $scope.$emit("tdgal-focus", data);
                     },
                     onInit: function() {
+                        if (onInitCallback) {
+                            onInitCallback();
+                        }
                         if ($scope.index) {
                             $elem.tdGal("focus", $scope.index);
                         }

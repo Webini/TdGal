@@ -32,9 +32,16 @@
 			replace: false,
 			scope: {
 				data: '=',
+				onFocus: '&?',
+				onClick: '&?',
+				onInit: '&?',
 				index: '='
 			},
 			link: function($scope, $elem, $attrs, $ctrl){
+				var onFocusCallback = ($scope.onFocus ? $scope.onFocus() : null);
+				var onClickCallback = ($scope.onClick ? $scope.onClick() : null);
+				var onInitCallback  = ($scope.onInit ? $scope.onInit() : null);
+			
 				var templateUrl = $attrs.templateUrl;
 				$scope.localIndex = $scope.index;
 				
@@ -55,17 +62,24 @@
 						return el;
 					},
 					onClick: function(data){
-						$scope.$emit('tdgal-click', data);
+						if(onClickCallback){
+							onClickCallback(data);
+						}
 					},
 					onFocus: function(data, index){
 						$scope.index = $scope.localIndex = index;
+						if(onFocusCallback){
+							onFocusCallback(data);
+						}
 						
 						if(!$scope.$$phase && !$rootScope.$$phase)
 							$scope.$apply();
-						
-						$scope.$emit('tdgal-focus', data);
 					},
 					onInit: function(){
+						if(onInitCallback){
+							onInitCallback();
+						}
+						
 						if($scope.index){
 							$elem.tdGal('focus', $scope.index);
 						}
